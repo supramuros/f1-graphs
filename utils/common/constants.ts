@@ -1,4 +1,4 @@
-export const URL_BASE = 'http://ergast.com/api/f1';
+export const URL_BASE = 'https://ergast.com/api/f1';
 
 export enum ERGAST_API {
     SEASONS = 'seasons',
