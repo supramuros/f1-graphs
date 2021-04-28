@@ -167,7 +167,7 @@ export default function DriverSummary(props:AppState){
         .grid-container{
             display:grid;
             grid-template-columns:auto 2fr 1fr;
-            grid-template-rows:1fr;
+            grid-template-rows:auto 1fr;
             height:100%;
             min-height:500px;
         }

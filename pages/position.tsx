@@ -106,8 +106,8 @@ export default function Position(props:AppState){
                     onSeriesBlur={()=>props.setDriver(null)}
                     hint={props.lap&&(props.lap>0&&props.lap<raceDetails.numLaps)
                         ?(<Hint
-                            value={{x:props.lap,y:1}}
-                            align={{vertical: 'auto', horizontal:props.lap<raceDetails.numLaps/2?'right':'left'}}
+                            value={{x:props.lap,y:0}}
+                            align={{vertical: 'bottom', horizontal:props.lap<raceDetails.numLaps/2?'right':'left'}}
                             style={{height:'100%', display:'flex', paddingTop:'15px'}}
                         >
                             <DriverList 
