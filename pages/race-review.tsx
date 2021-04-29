@@ -15,7 +15,7 @@ export default function RaceReviewGap(props:AppState){
                           ?true
                           :false;
 
-    if(isLoading||!props.driverList){
+    if(isLoading||!props.driverList||!raceDetails){
         return <Loading/>
     } 
     const lapsArray = [];

@@ -11,7 +11,7 @@ export default function SummaryCardSection(props:Props){
             <h3>{props.title}</h3>
             <ul className='section-data'>
                 {props.rows.map(r=>(
-                    <li>
+                    <li key={r.label}>
                         <span className='label'>
                             {r.label}
                         </span>

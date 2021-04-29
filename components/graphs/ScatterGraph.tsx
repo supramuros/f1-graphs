@@ -68,7 +68,6 @@ export default function ScatterGraph(
         xTicksMap.set(v.x,v.xLabel?v.xLabel:v.x);
     });
     const xTicksArray = Array.from(xTicksMap.keys()).map(m=>({value:m,label:xTicksMap.get(m)}));
-
     /*
     const xTicksArray = Array.from(new Set(data
         .flatMap(x=>x.series
@@ -132,11 +131,19 @@ export default function ScatterGraph(
             <XAxis
                 style={{stroke:'white'}}
                 orientation='bottom'
+                tickTotal = {xTicksArray.length}
+                tickValues={xTicksArray.length>30
+                    ?xTicksArray.filter((f,index)=>index%2==0).map(i=>i.value)
+                    :xTicksArray.map(i=>i.value)}
                 tickFormat={v=>xTicksArray[v-1].label}
             />
             <XAxis
                 style={{stroke:'white'}}
                 orientation='top'
+                tickTotal = {xTicksArray.length}
+                tickValues={xTicksArray.length>30
+                    ?xTicksArray.filter((f,index)=>index%2==0).map(i=>i.value)
+                    :xTicksArray.map(i=>i.value)}
                 tickFormat={v=>xTicksArray[v-1].label}
             />
             <YAxis

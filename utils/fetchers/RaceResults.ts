@@ -1,5 +1,5 @@
 import swrError from '../common/swrError';
-import {URL_BASE,CONSTRUCTOR_COLOR_MAP} from '../common/constants';
+import {URL_BASE,CONSTRUCTOR_COLOR_MAP, DEFAULT_CONSTRUCTOR_COLOR} from '../common/constants';
 import {deserializeRace} from './SeasonSchedule';
 import {timeStringToSeconds} from '../common/util';
 import { Race } from '../../types/Race';
@@ -96,7 +96,9 @@ export function deserializeDriver(data):Driver{
         driverName:data.Driver.givenName+' '+data.Driver.familyName,
         constructorId:data.Constructor.constructorId,
         constructorName:data.Constructor.name,
-        constructorColor:CONSTRUCTOR_COLOR_MAP.get(data.Constructor.constructorId)?CONSTRUCTOR_COLOR_MAP.get(data.Constructor.constructorId):null
+        constructorColor:CONSTRUCTOR_COLOR_MAP.get(data.Constructor.constructorId)
+            ?CONSTRUCTOR_COLOR_MAP.get(data.Constructor.constructorId)
+            :DEFAULT_CONSTRUCTOR_COLOR
     })
 }
 export function deserializeDriverFull(data):Driver{
@@ -111,6 +113,8 @@ export function deserializeDriverFull(data):Driver{
         constructorName:data.Constructor.name,
         constructorUrl:data.Constructor.url,
         constructorNationality:data.Constructor.nationality,
-        constructorColor:CONSTRUCTOR_COLOR_MAP.get(data.Constructor.constructorId)?CONSTRUCTOR_COLOR_MAP.get(data.Constructor.constructorId):null
+        constructorColor:CONSTRUCTOR_COLOR_MAP.get(data.Constructor.constructorId)
+            ?CONSTRUCTOR_COLOR_MAP.get(data.Constructor.constructorId)
+            :DEFAULT_CONSTRUCTOR_COLOR
     })
 }

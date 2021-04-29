@@ -21,7 +21,7 @@ export default function DriverDetail(props:AppState){
                         props.driver?driverMap.get(props.driver).laps:undefined,
                         props.driver?driverMap.get(props.driver).driver.constructorColor:undefined);
 
-    if(isLoading||!props.driverList){
+    if(isLoading||!props.driverList||!raceDetails){
         return <Loading/>
     } 
     const lapsArray = [];
@@ -146,7 +146,7 @@ export default function DriverDetail(props:AppState){
             data={props.driverList.map(d=>(
                 {
                     seriesKey:d.driverId,
-                    series:driverMap.get(d.driverId).laps.map(l=>({
+                    series:driverMap.get(d.driverId).laps.filter(f=>f.lapNum>0).map(l=>({
                         key:l.driverId,
                         x:driverMap.get(d.driverId).endingPosition,
                         xLabel:driverMap.get(d.driverId).driver.driverCode,

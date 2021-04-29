@@ -1,5 +1,5 @@
 import swrError from '../common/swrError';
-import {URL_BASE,CONSTRUCTOR_COLOR_MAP} from '../common/constants';
+import {URL_BASE,CONSTRUCTOR_COLOR_MAP, DEFAULT_CONSTRUCTOR_COLOR} from '../common/constants';
 import { Constructor, ConstructorStanding, DriverStanding } from '../../types/StandingsTypes';
 import { Driver } from '../../types/RaceResult';
 /*
@@ -109,6 +109,8 @@ export function deserializeConstructor(data):Constructor{
         constructorUrl:data.url,
         constructorNationality:data.nationality,
         constructorColor:CONSTRUCTOR_COLOR_MAP.get(data.constructorId)
+          ?CONSTRUCTOR_COLOR_MAP.get(data.constructorId)
+          :DEFAULT_CONSTRUCTOR_COLOR
     });
 }
 
