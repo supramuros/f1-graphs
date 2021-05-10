@@ -21,7 +21,7 @@ export default function DriverSummary(props:AppState){
     for(let i = 0; i<=raceDetails.numLaps; i++){
         lapsArray.push({value:i,label:i});
     }
-
+    console.log(driverMap);
     return (
         <div className='grid-container'>
             <div className='left-column'>  
@@ -66,10 +66,10 @@ export default function DriverSummary(props:AppState){
                             disabled:!d.enabled,
                             x:driverMap.get(d.driverId).endingPosition,
                             xLabel:driverMap.get(d.driverId).driver.driverCode,
-                            yLow:-1*driverMap.get(d.driverId).raceStats.slowestLapNetPitTime,
+                            yLow:driverMap.get(d.driverId).raceStats.slowestLapNetPitTime?-1*driverMap.get(d.driverId).raceStats.slowestLapNetPitTime:-1*driverMap.get(d.driverId).raceStats.slowestLapTime,
                             yHigh:-1*driverMap.get(d.driverId).raceStats.fastestLapTime,
-                            yBoxLow:-1*(driverMap.get(d.driverId).raceStats.avgLapNetPitTime+driverMap.get(d.driverId).raceStats.varianceNetPitTime*2),
-                            yBoxHigh:-1*(driverMap.get(d.driverId).raceStats.avgLapNetPitTime-driverMap.get(d.driverId).raceStats.varianceNetPitTime*2),
+                            yBoxLow:-1*(driverMap.get(d.driverId).raceStats.avgLapNetPitTime+Math.sqrt(driverMap.get(d.driverId).raceStats.varianceNetPitTime*2)/5),
+                            yBoxHigh:-1*(driverMap.get(d.driverId).raceStats.avgLapNetPitTime-Math.sqrt(driverMap.get(d.driverId).raceStats.varianceNetPitTime*2)/5),
                             color:driverMap.get(d.driverId).driver.constructorColor
                         })).filter(f=>f.yBoxLow<0)}
                         markData={props.driverList.map(d=>({
@@ -110,8 +110,8 @@ export default function DriverSummary(props:AppState){
                             key='slowest'
                             title='Slowest Lap'
                             rows={[
-                                {label:'Lap', value:props.driver?driverMap.get(props.driver).raceStats.slowestLapNetPit:null},
-                                {label:'Time',value:props.driver?driverMap.get(props.driver).raceStats.slowestLapNetPitTime.toFixed(3):null}
+                                {label:'Lap', value:props.driver?driverMap.get(props.driver).raceStats.slowestLapNetPit?driverMap.get(props.driver).raceStats.slowestLapNetPit:driverMap.get(props.driver).raceStats.slowestLapNumber:null},
+                                {label:'Time',value:props.driver?driverMap.get(props.driver).raceStats.slowestLapNetPitTime===0?driverMap.get(props.driver).raceStats.slowestLapTime.toFixed(3):driverMap.get(props.driver).raceStats.slowestLapNetPitTime.toFixed(3):null}
                             ]}
                         />
                         <SummaryCardSection

@@ -11,12 +11,12 @@ import { DriverRaceResult, RaceDriverMap, RaceResult } from "../../types/RaceRes
 *Return: {race:Race, data:Map<driverId, Driver>}
 */
 
-export default function fetchRaceCombined(raceData:RaceResult,pitData:RacePitStops,lapData:RaceLaps):RaceDriverMap{    
+export default function fetchRaceCombined(raceData:RaceResult,lapData:RaceLaps,pitData?:RacePitStops,):RaceDriverMap{    
     const driverMap = new Map<string,DriverRaceResult>();    
-    if(raceData){
-        
+    if(!raceData){
+        return {race:undefined, driverMap:undefined};
     }
-    if(pitData&&lapData){
+    if(lapData){
         raceData.results.forEach(r=>{
             //by convention we will eventually set lap[0] to the below
             //allows us to have qualifying/starting row information in laps easily
@@ -35,15 +35,19 @@ export default function fetchRaceCombined(raceData:RaceResult,pitData:RacePitSto
             }
 
             const driverLaps = lapData.laps.filter(l=>l.driverId===r.driver.driverId);
-            const driverPitStops = pitData.pitStops.filter(p=>p.driverId===r.driver.driverId);
-            //Update driverLaps with pitstop details
-            //driverLaps are sorted by lapnumber in that fetcher process
-            driverPitStops.forEach(pit=>{
+            //Pitstop data is added to the main data
+            if(pitData){
+                const driverPitStops = pitData.pitStops.filter(p=>p.driverId===r.driver.driverId);
+                //Update driverLaps with pitstop details
+                //driverLaps are sorted by lapnumber in that fetcher process
+                driverPitStops.forEach(pit=>{
                 //Pitstop lap is when the car enters the pits but the time is added to the next lap
                 //hence pit.lapNum is lap.lapNum-1; array index is 0 so we can just do pit.lapNum
                 driverLaps[pit.lapNum].pitStopTime = pit.duration;
                 driverLaps[pit.lapNum].timeNetPitStop = driverLaps[pit.lapNum].time - pit.duration;
             });
+            }
+            
             //caclulate race statistics
             const {slowestLapNum,
                 slowestLapNetPit, 
@@ -67,9 +71,10 @@ export default function fetchRaceCombined(raceData:RaceResult,pitData:RacePitSto
             //add to Map
             driverMap.set(r.driver.driverId,r);
         })
-
+        return {race:raceData.race, driverMap:driverMap};
     }
-    return {race:raceData.race, driverMap:driverMap};
+    
+    return {race:raceData.race, driverMap:undefined};
 }
 
 function calculateDriverRaceStatistics(laps:Lap[]){
@@ -103,13 +108,15 @@ function calculateDriverRaceStatistics(laps:Lap[]){
     //explicitly set to 0 if number of laps is 0 and also avoid div by 0
     avgLapTime = lapSum>0?lapTimeSum/lapSum:0;
     avgLapNetPitTime = lapSum>0?lapTimeNetPitSum/lapSum:0;
-    //Calculate variance in second pss
+    //Calculate variance in second pass
     let varianceSum=0;
     let varianceNetPitSum=0;
     laps.forEach((i,index)=>{
-        if(index>0 && index<laps.length)
-        varianceSum += (i.time-avgLapTime)^2;
-        varianceNetPitSum += ((i.timeNetPitStop?i.timeNetPitStop:i.time)-avgLapNetPitTime)^2;
+        if(index>0 && index<laps.length){
+            varianceSum += ((i.time-avgLapTime)**2);
+            varianceNetPitSum += (((i.timeNetPitStop?i.timeNetPitStop:i.time)-avgLapNetPitTime)**2);
+        }
+        
     });
     //explicitly set to 0 if number of laps is 0 and also avoid div by 0
     varianceLapTime = lapSum>0?varianceSum/lapSum:0;

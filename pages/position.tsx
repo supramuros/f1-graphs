@@ -17,6 +17,7 @@ export default function Position(props:AppState){
     if(isLoading||!props.driverList||!raceDetails){
         return <Loading/>
     } 
+
     const lapsArray = [];
     for(let i = 0; i<=raceDetails.numLaps; i++){
         lapsArray.push({value:i,label:i});

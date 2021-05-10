@@ -20,11 +20,10 @@ export default function useResultsLapsPitstops(season:string,round:string){
         (api,season,round) => 
         fetchRaceLaps(season,round),{revalidateOnFocus:false, dedupingInterval:10000000});
         
-    const {data, error} = useSWR((raceData&&raceData.results&&!raceError&&pitData&&!pitError&&lapData&&!lapError)
-                                            ?[ERGAST_API.RESULTSLAPS,season,round]:null,
-        (api,season,round) => 
-        fetchRaceCombined(raceData,pitData,lapData),{revalidateOnFocus:false, dedupingInterval:10000000});
-    
+    const {data, error} = useSWR((raceData&&raceData.results&&!raceError&&lapData&&!lapError)
+                                            ?[ERGAST_API.RESULTSLAPS,season,round,lapData,pitData]:null,
+        (api,season,round,lapData,pitData) => 
+        fetchRaceCombined(raceData,lapData,pitData),{revalidateOnFocus:false, dedupingInterval:10000000});
     return {
         isLoading:!error && !data,
         error:error,

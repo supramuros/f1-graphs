@@ -190,8 +190,8 @@ export default function DriverDetail(props:AppState){
                             key='slowest'
                             title='Slowest Lap'
                             rows={[
-                                {label:'Lap', value:props.driver?driverMap.get(props.driver).raceStats.slowestLapNetPit:null},
-                                {label:'Time',value:props.driver?driverMap.get(props.driver).raceStats.slowestLapNetPitTime.toFixed(3):null}
+                                {label:'Lap', value:props.driver?driverMap.get(props.driver).raceStats.slowestLapNetPit?driverMap.get(props.driver).raceStats.slowestLapNetPit:driverMap.get(props.driver).raceStats.slowestLapNumber:null},
+                                {label:'Time',value:props.driver?driverMap.get(props.driver).raceStats.slowestLapNetPitTime===0?driverMap.get(props.driver).raceStats.slowestLapTime.toFixed(3):driverMap.get(props.driver).raceStats.slowestLapNetPitTime.toFixed(3):null}
                             ]}
                         />
                         <SummaryCardSection
