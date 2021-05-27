@@ -91,6 +91,10 @@ function calculateDriverRaceStatistics(laps:Lap[]){
     let lapTimeNetPitSum = 0;
     let lapSum = 0;
     laps.forEach((i,index)=>{
+        //Set time net pit stop to time for each lap if not already defined
+        if(!i.timeNetPitStop){
+            i.timeNetPitStop=i.time;
+        }
         if(index>0 && index<laps.length){
             lapTimeSum+= i.time;
             lapTimeNetPitSum+=i.timeNetPitStop?i.timeNetPitStop:i.time;
@@ -101,7 +105,7 @@ function calculateDriverRaceStatistics(laps:Lap[]){
             }
             if(i.timeNetPitStop>slowestLapNetPitTime){
                 slowestLapNetPitTime = i.timeNetPitStop?i.timeNetPitStop:i.time;
-                slowestLapNetPit = i.lapNum;
+                slowestLapNetPit = i.lapNum;                
             }
         }
     });

@@ -21,7 +21,7 @@ export default function DriverSummary(props:AppState){
     for(let i = 0; i<=raceDetails.numLaps; i++){
         lapsArray.push({value:i,label:i});
     }
-    console.log(driverMap);
+
     return (
         <div className='grid-container'>
             <div className='left-column'>  
