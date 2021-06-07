@@ -35,6 +35,7 @@ export default function fetchRaceCombined(raceData:RaceResult,lapData:RaceLaps,p
             }
 
             const driverLaps = lapData.laps.filter(l=>l.driverId===r.driver.driverId);
+
             //Pitstop data is added to the main data
             if(pitData){
                 const driverPitStops = pitData.pitStops.filter(p=>p.driverId===r.driver.driverId);
@@ -43,11 +44,13 @@ export default function fetchRaceCombined(raceData:RaceResult,lapData:RaceLaps,p
                 driverPitStops.forEach(pit=>{
                 //Pitstop lap is when the car enters the pits but the time is added to the next lap
                 //hence pit.lapNum is lap.lapNum-1; array index is 0 so we can just do pit.lapNum
-                driverLaps[pit.lapNum].pitStopTime = pit.duration;
-                driverLaps[pit.lapNum].timeNetPitStop = driverLaps[pit.lapNum].time - pit.duration;
+                if(driverLaps.length>pit.lapNum){
+                    driverLaps[pit.lapNum].pitStopTime = pit.duration;
+                    driverLaps[pit.lapNum].timeNetPitStop = driverLaps[pit.lapNum].time - pit.duration;
+                }
+                
             });
             }
-            
             //caclulate race statistics
             const {slowestLapNum,
                 slowestLapNetPit, 
